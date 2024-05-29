@@ -97,7 +97,8 @@ def gep_simple(population, toolbox, n_generations=100, n_elites=1,
         # evaluate: only evaluate the invalid ones, i.e., no need to reevaluate the unchanged ones
         invalid_individuals = [ind for ind in population if not ind.fitness.valid]
 
-        individual_tensors = [torch.tensor(eval(str(ind))).float().to('cuda') for i, ind in enumerate(invalid_individuals)]
+        # nasty hack
+        individual_tensors = [torch.tensor(eval(str(ind))).float().to('cuda') if torch.tensor(eval(str(ind))).size() != torch.Size([]) else torch.ones(len(Y)).float() for i, ind in enumerate(invalid_individuals)]
         individual_tensor = torch.stack(individual_tensors)
         fitness_values = torch.mean((Y - individual_tensor) ** 2, dim=1).cpu().numpy()
 
