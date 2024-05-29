@@ -10,7 +10,7 @@ can be used as a reference.
 import deap
 import random
 import warnings
-
+import torch
 
 def _validate_basic_toolbox(tb):
     """
