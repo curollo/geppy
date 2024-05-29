@@ -96,9 +96,13 @@ def gep_simple(population, toolbox, n_generations=100, n_elites=1,
     for gen in range(n_generations + 1):
         # evaluate: only evaluate the invalid ones, i.e., no need to reevaluate the unchanged ones
         invalid_individuals = [ind for ind in population if not ind.fitness.valid]
-        fitnesses = toolbox.map(toolbox.evaluate, invalid_individuals)
-        for ind, fit in zip(invalid_individuals, fitnesses):
-            ind.fitness.values = fit
+
+        individual_tensors = [torch.tensor(eval(str(ind))).float().to('cuda') for i, ind in enumerate(invalid_individuals)]
+        individual_tensor = torch.stack(individual_tensors)
+        fitness_values = torch.mean((Y - individual_tensor) ** 2, dim=1).cpu().numpy()
+
+        for i, ind in enumerate(invalid_individuals):
+            ind.fitness.values = (fitness_values[i],)
 
         # record statistics and log
         if hall_of_fame is not None:
