@@ -32,6 +32,5 @@ setuptools.setup(
               'computational intelligence', 'genetic programming'],
     packages=setuptools.find_packages(),
     install_requires=['deap'],
-    download_url='https://github.com/ShuhuaGao/geppy/archive/v0.1.3.tar.gz'
 )
 
